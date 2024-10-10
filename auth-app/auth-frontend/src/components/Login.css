@@ -1,0 +1,60 @@
+/* Style for the container */
+div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f2f2f2;
+}
+
+/* Style for the form */
+form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for input fields */
+input[type="name"],
+input[type="email"],
+input[type="password"] {
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+/* Style for the button */
+button {
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* Style for button hover */
+button:hover {
+  background-color: #45a049;
+}
+
+/* Style for the error message */
+p {
+  color: red;
+  margin-bottom: 10px;
+}
+
+/* Style for the heading */
+h2 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
