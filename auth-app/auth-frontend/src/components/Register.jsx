@@ -25,7 +25,7 @@ function Register() {
 
   return (
     <div>
-      <h2>Register</h2>
+      <h2 className="text-2xl font-bold">Register</h2>
       {error && <p>{error}</p>}
       <form onSubmit={handleSubmit}>
         <input
@@ -46,7 +46,7 @@ function Register() {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
         />
-        <button type="submit">Register</button>
+        <button className="bg-green-500 text-white px-4 py-2" type="submit">Register</button>
       </form>
     </div>
   );

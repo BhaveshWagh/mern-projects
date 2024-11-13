@@ -27,7 +27,7 @@ function Login() {
 
   return (
     <div>
-      <h2>Login</h2>
+      <h2 className="text-2xl font-bold">Login</h2>
       {error && <p>{error}</p>}
       <form onSubmit={handleSubmit}>
         <input
@@ -42,7 +42,9 @@ function Login() {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
         />
-        <button type="submit">Login</button>
+        <button className="bg-green-500 text-white px-4 py-2" type="submit">
+          Login
+        </button>
       </form>
     </div>
   );

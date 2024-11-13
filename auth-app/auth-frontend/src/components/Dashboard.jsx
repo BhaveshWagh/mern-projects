@@ -33,16 +33,26 @@ function Dashboard() {
 
   return (
     <div>
-      <h2>Dashboard</h2>
-      <h2>User List</h2>
+      <h2 className="text-3xl font-bold"> Dashboard</h2>
+      <h2 className=" text-2xl font-bold">User List</h2>
       <ul>
         {users.map((user) => (
-          <li key={user._id}>
-            {user.name} - {user.email}
+          <li
+            className=" bg-gray-100 border border-gray-300 rounded-md p-4 my-2 shadow-sm hover:bg-gray-200 transition duration-200 ease-in-out"
+            key={user._id}
+          >
+            <span className="font-semibold text-blue-600">{user.name}</span> -{" "}
+            <span className="text-gray-700">{user.email}</span>
           </li>
         ))}
       </ul>
-      <button onClick={handleLogout}>Logout</button>
+
+      <button
+        className="bg-green-500 text-white px-4 py-2"
+        onClick={handleLogout}
+      >
+        Logout
+      </button>
     </div>
   );
 }
