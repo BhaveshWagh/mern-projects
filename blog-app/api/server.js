@@ -4,6 +4,9 @@ const mongoose = require("mongoose");
 const User = require("./models/User.jsx");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
+const multer = require("multer");
+const uploadMiddleware = multer({ data: "uploads/" });
 
 const app = express();
 require("dotenv").config();
@@ -11,6 +14,7 @@ require("dotenv").config();
 // middleware
 app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 app.use(express.json()); // parse incoming JSON requests
+app.use(cookieParser());
 
 // connect to mongodb
 mongoose
@@ -58,15 +62,57 @@ app.post("/login", async (req, res) => {
       {},
       (err, token) => {
         if (err) throw err;
-        // res.json(token);
+
         // set cookies
-        res.cookie("token", token).json("ok");
+        res.cookie("token", token).json({
+          id: userDoc._id,
+          username,
+        });
       }
     );
   } else {
     res.status(400).json("Wrong Credentials");
   }
   // res.json(passOk);
+});
+
+//
+// app.get("/profile", (req, res) => {
+//   // console.log("Cookies: ", req.cookies);
+//   // console.log("Signed Cookies: ", req.signedCookies);
+//   const { token } = req.cookies;
+//   jwt.verify(token, process.env.SECRET, {}, (err, info) => {
+//     if (err) throw err;
+//     res.json(info);
+//   });
+//   // res.json(req.cookies);
+// });
+
+app.get("/profile", (req, res) => {
+  const { token } = req.cookies;
+
+  // Check if token is present
+  if (!token) {
+    console.error("No token provided");
+    return res.status(401).json({ error: "Token not provided" });
+  }
+
+  // Verify token
+  jwt.verify(token, process.env.SECRET, {}, (err, info) => {
+    if (err) {
+      console.error("JWT Verification Error:", err);
+      return res.status(403).json({ error: "Invalid token" });
+    }
+    res.json(info);
+  });
+});
+
+app.post("/logout", (req, res) => {
+  res.cookie("token", "").json("logout ok");
+});
+
+app.post("/post", uploadMiddleware.single("file"), (req, res) => {
+  res.json(req.files);
 });
 
 // start server
