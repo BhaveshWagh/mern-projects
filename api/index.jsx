@@ -16,17 +16,17 @@ mongoose
   .catch((err) => console.log("mongoose error: " + err));
 
 // POST route
-app.post("/register", async (req, res) => {
-  // grasp the name, username, & password from request body
-  const { username, password } = req.body;
-  try {
-    const userDoc = await User.create({ username, password });
-    res.json(userDoc);
-  } catch (error) {
-    res.status(400).json(error);
-  }
-  //   res.json({ requestedData: { name, username, password } });
-});
+// app.post("/register", async (req, res) => {
+//   // grasp the name, username, & password from request body
+//   const { username, password } = req.body;
+//   try {
+//     const userDoc = await User.create({ username, password });
+//     res.json(userDoc);
+//   } catch (error) {
+//     res.status(400).json(error);
+//   }
+//   //   res.json({ requestedData: { name, username, password } });
+// });
 
 // start server
 app.listen(8000, () => {
