@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { Navigate } from "react-router-dom";
 const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [content, setContent] = useState("");
   const [files, setFiles] = useState("");
+  const [redirect, setRedirect] = useState(false);
 
- async function createNewPost(ev) {
+  async function createNewPost(ev) {
     const data = new FormData();
     data.set("title", title);
     data.set("summary", summary);
@@ -19,9 +21,16 @@ const CreatePost = () => {
     // console.log(files);
     const response = await fetch("http://localhost:8000/post", {
       method: "POST",
-      body: data ,
+      body: data,
+      credentials: "include", // now we send cookie from create post to grap it where it is needed
     });
-    
+    // console.log(await response.json()) ;
+    if (response.ok) {
+      setRedirect(true);
+    }
+  }
+  if (redirect) {
+    return <Navigate to={"/"} />;
   }
   return (
     <form onSubmit={createNewPost}>

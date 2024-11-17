@@ -2,11 +2,14 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const User = require("./models/User.jsx");
+const Post = require("./models/Post.jsx");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const multer = require("multer");
-const uploadMiddleware = multer({ data: "uploads/" });
+const uploadMiddleware = multer({ dest: "uploads/" });
+// rename the file
+const fs = require("fs");
 
 const app = express();
 require("dotenv").config();
@@ -15,6 +18,8 @@ require("dotenv").config();
 app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 app.use(express.json()); // parse incoming JSON requests
 app.use(cookieParser());
+// to get image : note __dirname means current dir
+app.use("/uploads", express.static(__dirname + "/uploads"));
 
 // connect to mongodb
 mongoose
@@ -111,8 +116,44 @@ app.post("/logout", (req, res) => {
   res.cookie("token", "").json("logout ok");
 });
 
-app.post("/post", uploadMiddleware.single("file"), (req, res) => {
-  res.json(req.files);
+app.post("/post", uploadMiddleware.single("file"), async (req, res) => {
+  // grap the name of the file its default adding weired names
+  const { originalname, path } = req.file;
+  // res.json(req.file);
+  // res.json({files: req.file})
+  // extracted the extension.
+  const parts = originalname.split(".");
+  const ext = parts[parts.length - 1];
+  const newPath = path + "." + ext;
+  fs.renameSync(path, newPath);
+
+  // verify the token
+  const { token } = req.cookies;
+  jwt.verify(token, process.env.SECRET, {}, async (err, info) => {
+    if (err) throw err;
+
+    const { title, summary, content } = req.body;
+    const postDoc = await Post.create({
+      title,
+      summary,
+      content,
+      cover: newPath,
+      author: info.id,
+    });
+
+    res.json(postDoc);
+    // res.json(info);
+  });
+  // res.json({ title, summary, content }); // pdf
+});
+//get all the post from db
+app.get("/post", async (req, res) => {
+  res.json(
+    await Post.find()
+      .populate("author", ["username"])
+      .sort({ createdAt: -1 })
+      .limit(20)
+  );
 });
 
 // start server
