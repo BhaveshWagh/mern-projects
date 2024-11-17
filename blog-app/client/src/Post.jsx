@@ -1,23 +1,25 @@
-export default function Post() {
+import { formatISO9075 } from "date-fns";
+
+export default function Post({
+  title,
+  summary,
+  cover,
+  content,
+  createdAt,
+  author,
+}) {
   return (
     <div className="post">
       <div className="image">
-        <img src="https://img.freepik.com/free-photo/abstract-autumn-beauty-multi-colored-leaf-vein-pattern-generated-by-ai_188544-9871.jpg" />
+        <img src={"http://localhost:8000/" + cover} alt="cover-img" />
       </div>
       <div className="texts">
-        <h2>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry.
-        </h2>
+        <h2>{title}</h2>
         <p className="info">
-          <a className="author">Dawid Paszko</a>
-          <time>2024-10-04 16:45</time>
+          <a className="author">{author.username}</a>
+          <time>{formatISO9075(new Date(createdAt))}</time>
         </p>
-        <p className="summary">
-          Lorem Ipsum has been the industry's standard dummy text ever since the
-          1500s, when an unknown printer took a galley of type and scrambled it
-          to make a type specimen book.
-        </p>
+        <p className="summary">{summary}</p>
       </div>
     </div>
   );
