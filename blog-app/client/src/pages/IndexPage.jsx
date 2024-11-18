@@ -12,6 +12,11 @@ export default function IndexPage() {
       });
     });
   }, []);
-  return <>{posts.length > 0 && posts.map((post) => <Post key={post._id} {...post} />)}</>;
+  return (
+    <>
+      {posts.length > 0 &&
+        posts.map((post) => <Post key={post._id} {...post} />)}
+    </>
+  );
 }
 //  <Post {...post} /> using ...post we pass the all information to the Post.jsx
