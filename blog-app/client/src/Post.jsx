@@ -10,7 +10,7 @@ export default function Post({
   createdAt,
   author,
 }) {
-  console.log(content);
+  // console.log(content);
   return (
     <div className="post">
       <div className="image">

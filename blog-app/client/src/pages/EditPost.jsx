@@ -1,40 +1,52 @@
-import React, { useState } from "react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import { Navigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import Editor from "../Editor";
-const CreatePost = () => {
+import { Navigate, useParams } from "react-router-dom";
+
+const EditPost = () => {
+  const { id } = useParams();
+
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [content, setContent] = useState("");
   const [files, setFiles] = useState("");
+
   const [redirect, setRedirect] = useState(false);
 
-  async function createNewPost(ev) {
+  useEffect(() => {
+    fetch("http://localhost:8000/post/" + id).then((response) => {
+      response.json().then((postInfo) => {
+        setTitle(postInfo.title);
+        setContent(postInfo.content);
+        setSummary(postInfo.summary);
+      });
+    });
+  }, []);
+
+  async function updatePost(ev) {
+    ev.preventDefault();
     const data = new FormData();
     data.set("title", title);
     data.set("summary", summary);
     data.set("content", content);
-    // we only want send one file not multiple thats why index is 0
-    data.set("file", files[0]);
-
-    ev.preventDefault();
-    // console.log(files);
+    data.set("id", id);
+    if (files?.[0]) {
+      data.set("file", files?.[0]);
+    }
     const response = await fetch("http://localhost:8000/post", {
-      method: "POST",
+      method: "PUT",
       body: data,
-      credentials: "include", // now we send cookie from create post to grap it where it is needed
+      credentials: "include",
     });
-    // console.log(await response.json()) ;
     if (response.ok) {
       setRedirect(true);
     }
   }
+
   if (redirect) {
-    return <Navigate to={"/"} />;
+    return <Navigate to={"/post/" + id} />;
   }
   return (
-    <form onSubmit={createNewPost}>
+    <form onSubmit={updatePost}>
       <input
         type="title"
         placeholder={"Title"}
@@ -54,9 +66,9 @@ const CreatePost = () => {
         onChange={(newValue) => setContent(newValue)}
       /> */}
       <Editor onChange={setContent} value={content} />
-      <button style={{ marginTop: "6px" }}>Create Post</button>
+      <button style={{ marginTop: "6px" }}>Update Post</button>
     </form>
   );
 };
 
-export default CreatePost;
+export default EditPost;
