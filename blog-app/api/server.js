@@ -81,18 +81,6 @@ app.post("/login", async (req, res) => {
   // res.json(passOk);
 });
 
-//
-// app.get("/profile", (req, res) => {
-//   // console.log("Cookies: ", req.cookies);
-//   // console.log("Signed Cookies: ", req.signedCookies);
-//   const { token } = req.cookies;
-//   jwt.verify(token, process.env.SECRET, {}, (err, info) => {
-//     if (err) throw err;
-//     res.json(info);
-//   });
-//   // res.json(req.cookies);
-// });
-
 app.get("/profile", (req, res) => {
   const { token } = req.cookies;
 
@@ -124,8 +112,6 @@ app.post("/post", uploadMiddleware.single("file"), async (req, res) => {
   const ext = parts[parts.length - 1];
   const newPath = path + "." + ext;
   fs.renameSync(path, newPath);
-  // res.json(req.file);
-  // res.json({files: req.file})
 
   // verify the token
   const { token } = req.cookies;
@@ -144,7 +130,6 @@ app.post("/post", uploadMiddleware.single("file"), async (req, res) => {
     res.json(postDoc);
     // res.json(info);
   });
-  // res.json({ title, summary, content }); // pdf
 });
 
 // update post endpoint put:

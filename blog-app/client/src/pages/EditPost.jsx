@@ -61,10 +61,7 @@ const EditPost = () => {
       />
 
       <input type="file" onChange={(ev) => setFiles(ev.target.files)} />
-      {/* <ReactQuill
-        value={content}
-        onChange={(newValue) => setContent(newValue)}
-      /> */}
+
       <Editor onChange={setContent} value={content} />
       <button style={{ marginTop: "6px" }}>Update Post</button>
     </form>
