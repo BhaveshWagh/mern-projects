@@ -10,7 +10,6 @@ export default function Post({
   createdAt,
   author,
 }) {
-  // console.log(content);
   return (
     <div className="post">
       <div className="image">
@@ -27,7 +26,6 @@ export default function Post({
           <time>{formatISO9075(new Date(createdAt))}</time>
         </p>
         <p className="summary">{summary}</p>
-        {/* <p>{content}</p> */}
       </div>
     </div>
   );

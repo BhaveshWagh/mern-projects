@@ -19,13 +19,13 @@ const CreatePost = () => {
     data.set("file", files[0]);
 
     ev.preventDefault();
-    // console.log(files);
+
     const response = await fetch("http://localhost:8000/post", {
       method: "POST",
       body: data,
-      credentials: "include", // now we send cookie from create post to grap it where it is needed
+      credentials: "include",
     });
-    // console.log(await response.json()) ;
+
     if (response.ok) {
       setRedirect(true);
     }
@@ -49,10 +49,6 @@ const CreatePost = () => {
       />
 
       <input type="file" onChange={(ev) => setFiles(ev.target.files)} />
-      {/* <ReactQuill
-        value={content}
-        onChange={(newValue) => setContent(newValue)}
-      /> */}
       <Editor onChange={setContent} value={content} />
       <button style={{ marginTop: "6px" }}>Create Post</button>
     </form>

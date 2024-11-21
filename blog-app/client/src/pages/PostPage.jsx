@@ -10,7 +10,6 @@ const PostPage = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    // console.log(params);
     fetch(`http://localhost:8000/post/${id}`).then((response) => {
       response.json().then((postInfo) => {
         setPostInfo(postInfo);
