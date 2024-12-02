@@ -184,6 +184,45 @@ app.get("/post/:id", async (req, res) => {
   res.json(postDoc);
 });
 
+// Delete Post
+// DELETE post endpoint
+app.delete("/post/:id", async (req, res) => {
+  const { token } = req.cookies; // Retrieve the token from cookies
+  const { id } = req.params; // Post ID from URL params
+
+  // Verify the token
+  jwt.verify(token, process.env.SECRET, {}, async (err, info) => {
+    if (err) {
+      console.error("JWT Verification Error:", err);
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    try {
+      // Find the post by ID
+      const postDoc = await Post.findById(id);
+      if (!postDoc) {
+        return res.status(404).json({ message: "Post not found" });
+      }
+
+      // Check if the logged-in user is the author of the post
+      const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(info.id);
+      if (!isAuthor) {
+        return res.status(403).json({ message: "You are not authorized to delete this post" });
+      }
+
+      // Delete the post
+      await postDoc.deleteOne();
+
+      res.json({ message: "Post deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+});
+
+
+
 // start server
 app.listen(8000, () => {
   console.log("server is running on PORT:8000");
