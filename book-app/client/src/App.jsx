@@ -1,9 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 function App() {
   const [title, setTitle] = useState("");
   const [file, setFile] = useState("");
+  const [allImage, setAllImage] = useState(null);
+
+  useEffect(() => {
+    getPdf();
+  }, []);
+
+  const getPdf = async () => {
+    const result = await axios.get("http://localhost:8000/get-files");
+    console.log(result.data.data);
+    setAllImage(result.data.data);
+  };
 
   const handleForm = async (e) => {
     e.preventDefault();
@@ -18,7 +29,11 @@ function App() {
         headers: { "Content-Type": "multipart/form-data" },
       }
     );
-    console.log(result)
+    console.log(result);
+  };
+  const showPdf = (pdf) => {
+    window.open(`http://localhost:8000/files/${pdf}`, "_blank", "noreferrer");
+    // setPdfFile(`http://localhost:5000/files/${pdf}`)
   };
 
   return (
@@ -45,6 +60,27 @@ function App() {
           Submit
         </button>
       </form>
+      <div className="uploaded">
+        <h4>Uploaded PDF:</h4>
+        <div className="output-div">
+          {allImage == null
+            ? ""
+            : allImage.map((data) => {
+                return (
+                  <div className="inner-div">
+                    <h6>Title: {data.title}</h6>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => showPdf(data.pdf)}
+                    >
+                      Show Pdf
+                    </button>
+                  </div>
+                );
+              })}
+        </div>
+      </div>
+      {/* <PdfCom pdfFile={pdfFile} /> */}
     </div>
   );
 }
