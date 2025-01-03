@@ -39,12 +39,12 @@ function App() {
   return (
     <div className="App">
       <form className="formStyle" onSubmit={handleForm}>
-        <h4>Upload PDF in React</h4> <br />
+        <h4>Digital Book Shelf</h4> <br />
         <input
           type="text"
           className="form-control"
           placeholder="Title"
-          required
+          required  
           onChange={(e) => setTitle(e.target.value)}
         />
         <br />
@@ -70,7 +70,7 @@ function App() {
                   <div className="inner-div">
                     <h6>Title: {data.title}</h6>
                     <button
-                      className="btn btn-primary"
+                      className="btn show-btn btn-primary"
                       onClick={() => showPdf(data.pdf)}
                     >
                       Show Pdf
